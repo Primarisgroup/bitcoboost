@@ -1,0 +1,62 @@
+workflow:
+  rules:
+    - when: always
+
+stages: [test, build, deploy]
+
+variables:
+  GIT_STRATEGY: clone
+  GIT_OPTIONAL_LOCKS: "0"
+
+test:lint:
+  stage: test
+  tags: ["windows","shell"]
+  script:
+    - 'echo Running lint/tests...'
+    - 'cmd.exe /d /c echo OK ^> test-report.txt'
+  artifacts:
+    when: always
+    paths:
+      - ./test-report.txt
+    expire_in: 7 days
+
+build:package:
+  stage: build
+  tags: ["windows","shell"]
+  needs: ["test:lint"]
+  script:
+    - 'echo Packaging...'
+    - 'cmd.exe /d /c if not exist dist mkdir dist'
+    - 'cmd.exe /d /c echo build output ^> dist\readme.txt'
+  artifacts:
+    name: "build-"
+    when: on_success
+    expire_in: 14 days
+    paths: [dist/]
+
+deploy:windows:
+  stage: deploy
+  tags: ["windows","shell"]
+  needs:
+    - job: build:package
+      artifacts: true
+  dependencies: ["build:package"]
+  script:
+    - 'echo === Deploy stage start ==='
+    - 'echo CI_COMMIT_BRANCH=%CI_COMMIT_BRANCH%'
+    - 'echo CI_PIPELINE_SOURCE=%CI_PIPELINE_SOURCE%'
+    - 'echo DEPLOY_TARGET_DIR=%DEPLOY_TARGET_DIR%'
+    - 'cmd.exe /d /c if not defined DEPLOY_TARGET_DIR set DEPLOY_TARGET_DIR=D:\Sites\bitcoboost'
+    - 'echo Target resolved: %DEPLOY_TARGET_DIR%'
+- 'cmd.exe /d /c "if not exist dist (echo ERRORE: cartella dist mancante & dir /b & exit /b 3)"'
+    - 'cmd.exe /d /c if not exist "%DEPLOY_TARGET_DIR%" mkdir "%DEPLOY_TARGET_DIR%"'
+    - 'cmd.exe /d /c "if not exist tools\deploy.cmd (echo ERRORE: tools\deploy.cmd mancante & dir /b tools & exit /b 4)"'
+    - 'cmd.exe /d /c tools\deploy.cmd'
+    - 'cmd.exe /d /c echo %DATE% %TIME% ^> "%DEPLOY_TARGET_DIR%\DEPLOY_OK_%CI_COMMIT_SHORT_SHA%.txt"'
+    - 'cmd.exe /d /c dir "%DEPLOY_TARGET_DIR%"'
+  artifacts:
+    when: always
+    expire_in: 14 days
+    paths: [robocopy.log]
+  environment:
+    name: production

@@ -1,0 +1,85 @@
+# Build artifacts
+*.o
+*.lo
+*.la
+*.so
+*.so.*
+*.a
+*.dylib
+*.dll
+*.exe
+*.lcov
+*.lcov.info
+*.gcda
+*.gcno
+
+# Autotools generated
+.deps/
+.libs/
+.dirstamp
+Makefile
+Makefile.in
+configure
+config.log
+config.status
+config.h
+config.h.in
+config.h.in~
+aclocal.m4
+autom4te.cache/
+build-aux/
+m4/libtool.m4
+m4/lt~obsolete.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+
+# Compiled binaries (non i sorgenti delle exe!)
+src/bitcoind
+src/bitcoin-cli
+src/bitcoin-tx
+src/bitcoin-util
+src/bitcoin-wallet
+src/test/test_bitcoin
+src/qt/bitcoin-qt
+src/qt/test/test_bitcoin-qt
+src/bench/bench_bitcoin
+
+# Depends
+depends/built/
+depends/sources/
+depends/work/
+depends/x86_64*/
+depends/i686*/
+depends/aarch64*/
+depends/arm*/
+depends/riscv*/
+depends/mips*/
+depends/powerpc*/
+depends/sdk-sources/
+
+# Coverage
+*.gcov
+coverage_percent.txt
+test_bitcoin.coverage/
+total.coverage/
+fuzz_seed_corpus*/
+
+# Locks / DB
+src/.dirstamp
+src/qt/temp_bitcoin_locale.qrc
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local configs
+src/.libs/
+src/qt/.libs/
+src/test/.libs/
+src/wallet/.libs/
+
+# Custom Bitcoboost
+bitcoboost-build*/
