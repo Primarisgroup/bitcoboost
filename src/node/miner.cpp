@@ -152,9 +152,22 @@ std::unique_ptr<CBlockTemplate> BlockAssembler::CreateNewBlock(const CScript& sc
     CMutableTransaction coinbaseTx;
     coinbaseTx.vin.resize(1);
     coinbaseTx.vin[0].prevout.SetNull();
-    coinbaseTx.vout.resize(1);
-    coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
-    coinbaseTx.vout[0].nValue = nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
+    // Bitcoboost: coinbase con premio fondatore (deve combaciare con la regola in validation.cpp)
+    {
+        CAmount blockReward = nFees + GetBlockSubsidy(nHeight, chainparams.GetConsensus());
+        CAmount founderReward = GetFounderRewardForBlock(nHeight, chainparams.GetConsensus());
+        if (founderReward > 0) {
+            coinbaseTx.vout.resize(2);
+            coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
+            coinbaseTx.vout[0].nValue = blockReward - founderReward;
+            coinbaseTx.vout[1].scriptPubKey = GetFounderScript();
+            coinbaseTx.vout[1].nValue = founderReward;
+        } else {
+            coinbaseTx.vout.resize(1);
+            coinbaseTx.vout[0].scriptPubKey = scriptPubKeyIn;
+            coinbaseTx.vout[0].nValue = blockReward;
+        }
+    }
     coinbaseTx.vin[0].scriptSig = CScript() << nHeight << OP_0;
     pblock->vtx[0] = MakeTransactionRef(std::move(coinbaseTx));
     pblocktemplate->vchCoinbaseCommitment = m_chainstate.m_chainman.GenerateCoinbaseCommitment(*pblock, pindexPrev);

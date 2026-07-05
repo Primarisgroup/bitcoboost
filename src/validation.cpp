@@ -25,6 +25,7 @@
 #include <hash.h>
 #include <kernel/chain.h>
 #include <kernel/chainparams.h>
+#include <chainparams.h>
 #include <kernel/coinstats.h>
 #include <kernel/disconnected_transactions.h>
 #include <kernel/mempool_entry.h>
@@ -1720,7 +1721,10 @@ namespace BBFounderReward {
     // con un address reale di Primaris Group SRLS.
     // Formato: bech32 mainnet (es. "bb1q...")
     inline const char* GetFounderAddress() {
-        return "bb1q8h90qgh0vdaxakjrnzm5cd446su8yx87lmzxfv";
+        const std::string net = Params().GetChainTypeString();
+        if (net == "regtest") return "bcrt1q0rfr4ges48ruh8ej8fup65d65mfp3alv44m7y9";
+        if (net == "test") return "tb1q0rfr4ges48ruh8ej8fup65d65mfp3alvhuznnv";
+        return "bb1q0rfr4ges48ruh8ej8fup65d65mfp3alvn2rhna";
     }
 }
 
@@ -1729,6 +1733,10 @@ CAmount GetFounderRewardForBlock(int nHeight, const Consensus::Params& consensus
     if (nHeight >= BBFounderReward::END_HEIGHT) return 0;
     CAmount blockSubsidy = GetBlockSubsidy(nHeight, consensusParams);
     return blockSubsidy * BBFounderReward::PERCENT / 100;
+}
+
+CScript GetFounderScript() {
+    return GetScriptForDestination(DecodeDestination(BBFounderReward::GetFounderAddress()));
 }
 
 CoinsViews::CoinsViews(DBParams db_params, CoinsViewOptions options)

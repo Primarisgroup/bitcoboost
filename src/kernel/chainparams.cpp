@@ -79,7 +79,7 @@ public:
         consensus.nSubsidyHalvingInterval = 210000;
         consensus.script_flag_exceptions.clear();
         // BIP heights: per una chain fresca, attiviamo tutti i fork da subito (height 0/1)
-        consensus.BIP34Height = 1;
+        consensus.BIP34Height = 17;
         consensus.BIP34Hash = uint256();
         consensus.BIP65Height = 1;
         consensus.BIP66Height = 1;
@@ -89,7 +89,7 @@ public:
 
         // Bitcoboost mainnet: powLimit Bitcoin-style (NON testnet).
         // Garantisce difficolta minima sufficiente a difendere la chain dal 51% attack.
-        consensus.powLimit = uint256S("00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.powLimit = uint256S("0000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 14 * 24 * 60 * 60; // due settimane
         consensus.nPowTargetSpacing = 10 * 60;            // 10 minuti
         consensus.fPowAllowMinDifficultyBlocks = false;
@@ -122,9 +122,9 @@ public:
         // Diversi dalla chain di sviluppo (0xFB 0xC0 0xB0 0x57) per garantire che
         // i nodi della chain vecchia NON si confondano con quelli della nuova.
         pchMessageStart[0] = 0xBB;
-        pchMessageStart[1] = 0x07;
-        pchMessageStart[2] = 0x14;
-        pchMessageStart[3] = 0x57;
+        pchMessageStart[1] = 0x16;
+        pchMessageStart[2] = 0x06;
+        pchMessageStart[3] = 0x26;
         nDefaultPort = 38210;
         nPruneAfterHeight = 100000;
         m_assumed_blockchain_size = 1;
@@ -243,6 +243,20 @@ public:
         checkpointData = {
             {
                 {0, consensus.hashGenesisBlock},
+                {840, uint256S("0000002d1874ec0c1374808e01192f62103adfea7ad474526b01c4f7b88cdbf0")},
+                {1500, uint256S("0000000041930cc785c8ad4caf8afc026fdc5d179a41f89db294136c38e2cd42")},
+                {1640, uint256S("000000003581dd9c41a96d9e500a5a7094cbf0a14bd7923a942edc882eae8fa9")},
+                {1880, uint256S("00000000897ebe8e92b482eedf08b40746d40cb896029bda6d5e93c91420c8a0")},
+                {2100, uint256S("00000001fed99603b6d750864ff043fd32d67519cee0d80aba676da275521be9")},
+                {2660, uint256S("000000009c5a62410be564294a02fb0400ddb0c31bbfe6e103c0965ca3edbc80")},
+                {3240, uint256S("000000005f298a3af1a06e3494723ca0043cd5a4f180498cbf103c847f71f852")},
+                {3740, uint256S("0000000122b0dd1df2354e0d6ff5820ac1ff826aec2f03275571aaf310685a67")},
+                {4040, uint256S("0000000077050b48386d229b3f2172fd4742d6bc98aaa62bd09387577d9dc3fb")},
+                {4180, uint256S("0000000009bee0c94ca69ec3acc2b9b70da1ff1b66fb82f0395c3b29598816e6")},
+                {4340, uint256S("00000000918646f8dc53022d6f2d0b45cf170ce3bf0b1ca71b9dda14e868b8b3")},
+                {4580, uint256S("000000001c42b1750393b63bfc397dcd570245e40a481a6b0c43e9b2a05858dd")},
+                {4740, uint256S("000000000dd0a2501141f61e61c89216c849b2790218de06a0905241aa7c395d")},
+                {4960, uint256S("000000002aab82b30e62f735b98f61611fb14f02125a55757f491bdac0d5f928")},
             }
         };
 

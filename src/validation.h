@@ -92,6 +92,8 @@ extern uint256 g_best_block;
 extern const std::vector<std::string> CHECKLEVEL_DOC;
 
 CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams);
+CAmount GetFounderRewardForBlock(int nHeight, const Consensus::Params& consensusParams);
+CScript GetFounderScript();
 
 bool FatalError(kernel::Notifications& notifications, BlockValidationState& state, const std::string& strMessage, const bilingual_str& userMessage = {});
 
