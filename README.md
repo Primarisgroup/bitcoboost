@@ -6,6 +6,8 @@ network, mining algorithm, and emission schedule.
 
 - **Website:** https://bitcoboost.com
 - **Block explorer:** https://explorer.bitcoboost.com
+- **Linux binaries (x86_64):** https://bitcoboost.com/downloads/bitcoboost-27.1-linux-x86_64.tar.gz
+  (sha256 676a77fc62232cfd648416b8a1200d5fcb6cf63065211ab1030e2b95db11cc0e)
 
 ## Key facts
 
